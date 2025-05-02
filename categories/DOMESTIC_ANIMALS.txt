@@ -1,0 +1,17 @@
+ram|баран
+donkey|осел
+mule|мул
+pig|свинья
+cat|кошка
+dog|собака
+calf|теленок
+lamb|ягненок
+foal|жеребенок
+piglet|поросенок
+kitten|котенок
+puppy|щенок
+mouse|мышь
+rat|крыса
+chinchilla|шиншилла
+hamster|хомяк
+guinea pig|морская свинка

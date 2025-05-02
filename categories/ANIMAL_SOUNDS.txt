@@ -1,0 +1,16 @@
+growl|реветь, рычать
+squeak|пищать
+scream|кричать
+roar|реветь, рычать
+cluck|кудахтать
+moo|мычать
+chirp|стрекотать
+bleat|блеять
+bark|лаять
+howl|выть
+quack|квакать
+hiss|шипеть
+laugh|смеяться
+tweet|чирикать
+meow|мяукать
+purr|мурлыкать
