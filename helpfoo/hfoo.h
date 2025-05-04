@@ -1,6 +1,7 @@
 #pragma once
 #include "definitions.h"
 #include "wjson.h"
+#include "detect_encode.h"
 #include <boost/locale/encoding.hpp>
 #include <boost/algorithm/string/trim.hpp>
 #include <io.h>    // для функции _setmode
@@ -8,6 +9,7 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+namespace ba = boost::algorithm;
 
 std::wostream &operator<<(std::wostream &os, const Dictionary &dictionary);
 std::wostream &operator<<(std::wostream &os, const CategoriedDictionary &dictionary);
@@ -51,7 +53,35 @@ std::string GetFilename(const std::filesystem::path &pth);
  * @param splitter char which role is delimeter
  * @returns Returns collection of unique words
  */
-std::unordered_set<std::wstring> SplitBySymbolSet(const std::wstring &line, char splitter);
+template<typename String, typename Char>
+std::unordered_set<String> SplitBySymbolSet(const String &line, Char splitter)
+{
+    std::unordered_set<String> res;
+    String tmp;
+    for (Char c : line)
+    {
+        
+        if (c != splitter)
+        {
+            tmp += c;
+        }
+        else
+        {
+            ba::trim(tmp);
+            if (!tmp.empty())
+            {
+                res.insert(move(tmp));
+            };
+            tmp.clear();
+        }
+    }
+    ba::trim(tmp);
+    if (!tmp.empty())
+    {
+        res.insert(move(tmp));
+    }
+    return res;
+}
 
 /**
  * @brief Splits Line by symbol
@@ -59,7 +89,39 @@ std::unordered_set<std::wstring> SplitBySymbolSet(const std::wstring &line, char
  * @param splitter char which role is delimeter
  * @returns Returns collection of words , may be repeats
  */
-std::vector<std::string> SplitBySymbolVec(const std::string &line, char splitter);
+template<typename String, typename Char>
+std::vector<String> SplitBySymbolVec(const String &line, Char splitter)
+    {
+        std::vector<String> res;
+        String tmp;
+        for (Char c : line)
+        {
+
+            if (c != splitter)
+            {
+                tmp += c;
+            }
+            else
+            {
+                ba::trim(tmp);
+                if (!tmp.empty())
+                {
+                    res.push_back(move(tmp));
+                };
+                tmp.clear();
+            }
+        }
+
+        if (!tmp.empty())
+        {
+            ba::trim(tmp);
+        }
+        if (!tmp.empty())
+        {
+            res.push_back(move(tmp));
+        }
+        return res;
+    }
 
 /**
  * @brief Reads info from file to string vector
@@ -137,4 +199,11 @@ std::wstring ToWstr(const T &value)
  * @param value value to convert
  */
 std::string WstrToStr(const std::wstring &value);
+
+
+bool Confirm();
+
+TextEncodingDetect::Encoding GetEncode(const std::filesystem::path& path);
+
+
 }

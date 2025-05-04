@@ -6,27 +6,22 @@
 
 int main(int argc, const char **argv)
 {
-    
-   try{ 
-    SETGLOBALLOCALES();
-    client::GameClientWin client("127.0.0.1", 80);
+  SETGLOBALLOCALES();
+  try
+  {
+    auto load_options = ParseCommandLineClient(argc, argv);
+
+    if (!load_options)
+    {
+      return EXIT_SUCCESS;
+    }
+    client::GameClientWin client(load_options.value().ip, load_options.value().port);
     client.Menu();
-   
-   }
-   catch(const std::exception& ex){
-      hf::WPrintSynchro(err_stream::stream , "EXCEPTION: ", hf::ToWstr(ex.what()));
-      abort();
-   }
-   
-
-
-//     auto load_options = ParseCommandLine(argc, argv);
-   // CreateDataBase();
-   // LanguageStorageSql sqp;
-    
-    
- // GameClientWin gc("127.0.0.1",80);
-   //gc.ForceLoadDictionary(sqp);
-   //gc.Menu();
+  }
+  catch (const std::exception &ex)
+  {
+    hf::WPrintSynchro(err_stream::stream, "EXCEPTION: ", hf::ToWstr(ex.what()));
+    abort();
+  }
 
 }

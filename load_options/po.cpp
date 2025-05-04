@@ -16,13 +16,21 @@ void CheckDictionaryLoadModeError(const po::variables_map &vm)
     }
 }
 
-std::optional<LoadOptions> ParseCommandLineServer(int argc, const char **argv)
+std::optional<LoadServerOptions> ParseCommandLineServer(int argc, const char **argv)
 {
     try
     {
-        LoadOptions lo;
+        LoadServerOptions lo;
         po::options_description options{"Options"};
-        options.add_options()("help,h", "Show Help")("auto_add_sql", "After Exit Saves Values To SQL Base")("loadsql", "Loads server dictyionary from SQL")("loadfile", "Loads server dictyionary from file")("ip", po::value(&lo.ip)->value_name("ip"), "Ip-adress where wil server be avalible")("port", po::value(&lo.port)->value_name("port"), "Port to coonect");
+        options.add_options()("help,h", "Show Help")
+
+            ("loadsql", "Loads server dictyionary from SQL")
+
+                ("loadfile", "Loads server dictyionary from file")
+
+                    ("ip", po::value(&lo.ip)->value_name("ip"), "Ip-adress where wil server be avalible")
+
+                        ("port", po::value(&lo.port)->value_name("port"), "Port to coonect");
 
         po::variables_map vm;
         po::parsed_options parsed_res = po::parse_command_line(argc, argv, options);
@@ -35,13 +43,6 @@ std::optional<LoadOptions> ParseCommandLineServer(int argc, const char **argv)
             return std::nullopt;
         }
         CheckDictionaryLoadModeError(vm);
-
-        ///////////////////////////////////////////////////
-        if (vm.count("auto_add_sql"))
-        {
-            lo.auto_save_to_sql = true;
-            wcout << L"Saving to SQL parameter enabled" << endl;
-        }
         //////////////////////////////////////////////////
         if (vm.count("loadsql"))
         {
@@ -68,10 +69,54 @@ std::optional<LoadOptions> ParseCommandLineServer(int argc, const char **argv)
     }
     catch (const std::exception &ex)
     {
-      hf::WPrintSynchro(err_stream::stream, hf::ToWstr(ex.what()));
-      abort();
+        hf::WPrintSynchro(err_stream::stream, hf::ToWstr(ex.what()));
+        abort();
     }
 
     return nullopt;
 };
 
+std::optional<LoadClientOptions> ParseCommandLineClient(int args, const char **argv)
+{
+
+    try
+    {
+        LoadClientOptions lo;
+        po::options_description options{"Options"};
+        options.add_options()("help", "Help")
+
+            ("ip", po::value(&lo.ip), "Servers IP")
+
+                ("port", po::value(&lo.port), "Port To connect");
+
+        po::variables_map vm;
+        po::parsed_options opt = po::parse_command_line(args, argv, options);
+        po::store(std::move(opt), vm);
+        po::notify(vm);
+
+        if (vm.count("help"))
+        {
+            std::cout << options << std::endl;
+            return std::nullopt;
+        }
+        //////////////////////////////////////////////////
+        
+        if (!vm.count("ip"))
+        {
+            hf::WPrintSynchro(err_stream::stream, L"Saving to SQL parameter enabled");
+            abort();
+        }
+
+        if (!vm.count("port"))
+        {
+            hf::WPrintSynchro(err_stream::stream, L"Saving to SQL parameter enabled");
+            abort();
+        }
+        return lo;
+    }
+    catch (const std::exception &ex)
+    {
+        hf::WPrintSynchro(err_stream::stream, hf::ToWstr(ex.what()));
+        abort();
+    }
+};

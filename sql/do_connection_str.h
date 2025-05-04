@@ -65,9 +65,6 @@ std::string GetReqestToCreateTableTranslate(const T &value)
     return oss.str();
 };
 
-
-
-
 /*
 ---------------------- INSERTERS TO TABLES ------------------------------
 */
@@ -75,8 +72,6 @@ std::string GetReqestToCreateTableTranslate(const T &value)
  * @brief Prepares request to insert to category one value 
  */
 std::string PrepareInsertToCategoryOneValue();
-
-
 /** 
  * @brief Prepares request to insert Word-Translate-ID into the needed table  
  */
@@ -164,10 +159,13 @@ std::string GetSelectIdCatecoriesByName(const T &value){
 /**
  * @brief Prepares request to select all words by needed category
  * @param id Category which words are needed.
- * 
  */
 std::string  GetRequestSelectFromTrBaseTablebyId(int id);
-}
+
+
+std::string GetReruestToDeleteCouple(const std::vector<std::wstring>& couple, const std::pair<int, std::wstring> &cat);
+
+};
 
 
 

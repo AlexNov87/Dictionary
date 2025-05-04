@@ -89,7 +89,7 @@ void CheckHost(const string &host)
         return;
     }
     CheckIpLine(host);
-    auto ip = hf::SplitBySymbolVec(host, '.');
+    auto ip = hf::SplitBySymbolVec<std::string, char>(host, '.');
     if (ip.size() != 4)
     {
         wcerr << L"IP CAN NOT CONTAIN " << ip.size() << L" MEMBERS";
@@ -151,7 +151,7 @@ unordered_map<string, string> ExecuteParameters(const vector<string> &lines)
     int line = 1;
     for (auto &&ln : lines)
     {
-        auto vec = hf::SplitBySymbolVec(ln, '=');
+        auto vec = hf::SplitBySymbolVec<std::string, char>(ln, '=');
         if (vec.size() != 2)
         {
             wcerr << "THERE ARE TOO MANY OR TOO LOW ARGUMENTS IN CONF FILE Line: " <<
@@ -270,7 +270,7 @@ std::string PrepareInsertToCategoryOneValue(){
     return "INSERT INTO categories (category_name) VALUES ($1) ON CONFLICT DO NOTHING";
 };
 
-std::string  GetRequestSelectFromTrBaseTablebyId(int id)
+std::string GetRequestSelectFromTrBaseTablebyId(int id)
 {
     std::ostringstream oss;
     oss << "SELECT source_id  , translate_id FROM trbase1 WHERE"
@@ -281,6 +281,15 @@ std::string  GetRequestSelectFromTrBaseTablebyId(int id)
 std::string  GetRequestInsertToCategories(const std::wstring &category){
     return GetRequestInsertToCategories(hf::WstrToStr(category));
 }
+
+std::string GetReruestToDeleteCouple(const std::vector<std::wstring>& couple , const std::pair<int, std::wstring> &cat){
+   std::ostringstream oss;
+   //("DELETE FROM trbase1 WHERE (source_id = $1 OR translate_id = $1) AND category_id = $2");
+   
+   oss << "DELETE FROM trbase1 WHERE (source_id = " << hf::ToUnaryQuotes(hf::WstrToStr(couple[0])) <<  
+   " AND translate_id = " <<  hf::ToUnaryQuotes(hf::WstrToStr(couple[1])) << ") AND category_id = " << cat.first << " ;";
+   return oss.str();
+} 
 
 }
 

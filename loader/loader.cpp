@@ -48,6 +48,7 @@ optional<unordered_set<int>> SplitLineNumbers(const wstring &line)
     return positions;
 }
 
+
 unordered_set<int> GetCategoryIndexes(const std::map<int, wstring> &cat_numerator)
 {
     for (auto &&i : cat_numerator)
@@ -69,7 +70,7 @@ unordered_set<int> GetCategoryIndexes(const std::map<int, wstring> &cat_numerato
         ba::trim(line);
         if(line == L"-ALL"){
           unordered_set<int> all;
-            for(auto && pair : cat_numerator ){
+            for(auto && pair : cat_numerator ) {
                 all.insert(pair.first);
             }
           return all;
@@ -112,8 +113,10 @@ pair<unordered_map<wstring, Dictionary>, unordered_map<wstring, Dictionary>> Get
 
     if (cat_numerator.empty())
     {
-        wcout << L"ПАПКА С ФАЙЛАМИ ПУСТА" << endl;
-        std::abort();
+        hf::WPrintSynchro(err_stream::stream, L"THE FOLDER ", 
+        hf::ToWstr(way.string()) , L" WHERE FROM YOU WANT LOAD FILES IS EMPTY");
+        system("pause");
+        return {};
     }
     // Recieving valid needed indexes of ways collection
     auto nums = GetCategoryIndexes(cat_numerator);
@@ -140,5 +143,14 @@ void LanguageStorageSql::LoadDictionary()
     this->dictfwd = std::make_shared<CategoriedDictionary>(move(dics.first));
     this->dictbwd = std::make_shared<CategoriedDictionary>(move(dics.second));
 };
+
+//LanguageStorageSaveToSQL
+void LanguageStorageSaveToSQL::LoadDictionary()
+{
+    auto dics = GetLangPairsFromTexts(folder_to_sql_load);
+    this->dictfwd = std::make_shared<CategoriedDictionary>(move(dics.first));
+    this->dictbwd = std::make_shared<CategoriedDictionary>(move(dics.second));
+};
+
 
 }

@@ -4,18 +4,31 @@
 #include <optional>
 #include <iostream>
 
+
+
 /**
- * @brief Structure which defines your server load options
+ * @brief Structure which defines your client load options
  */
-struct LoadOptions {
-   //After exiting program, words will be updated to DB 
-   bool auto_save_to_sql;
-   DictionaryMode dmode;
+struct LoadClientOptions {
    std::string ip;
    int port; 
 };
 
 /**
+ * @brief Structure which defines your server load options
+ */
+struct LoadServerOptions : public LoadClientOptions {
+
+   DictionaryMode dmode;
+   
+};
+
+/**
  * @brief Parses your command line
  */
-std::optional<LoadOptions> ParseCommandLineServer(int args, const char** argv);
+std::optional<LoadServerOptions> ParseCommandLineServer(int args, const char** argv);
+
+/**
+ * @brief Parses your command line
+ */
+std::optional<LoadClientOptions> ParseCommandLineClient(int args, const char** argv);

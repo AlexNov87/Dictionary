@@ -10,5 +10,7 @@ target_link_libraries(srv ${LIBS} ${Boost_LIBRARIES})
 
 add_executable(cli client.cpp)
 target_link_libraries(cli ${LIBS} clientlib ${Boost_LIBRARIES})
-##
-#add_executable(del deleter.cpp)
+
+add_executable(sqledit sql_edit.cpp )
+target_link_libraries(sqledit ${LIBS} ${Boost_LIBRARIES} sqleditlib hlp)
+

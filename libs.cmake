@@ -5,6 +5,8 @@ helpfoo/definitions.h
 helpfoo/constanst.cpp
 helpfoo/wjson.h
 helpfoo/wjson.cpp
+helpfoo/detect_encode.h
+helpfoo/detect_encode.cpp
 )
 add_library(hlp ${helps})
 target_link_libraries(hlp ${Boost_LIBRARIES})
@@ -38,7 +40,7 @@ loader/mthread.h
 random/rand.h 
 )
 add_library(word_loader ${loader_words})
-target_link_libraries(word_loader ${Boost_LIBRARIES} sql)
+target_link_libraries(word_loader ${Boost_LIBRARIES} sql hlp)
 
 
 
@@ -48,7 +50,7 @@ server/servloader.cpp
 server/connection.cpp
 )
 add_library(srvlib ${servercomplect})
-target_link_libraries(srvlib ${Boost_LIBRARIES} hlp sql)
+target_link_libraries(srvlib ${Boost_LIBRARIES} hlp sql hlp)
 
 
 set(clientcomplect
@@ -60,7 +62,15 @@ client/request.cpp
 helpfoo/constanst.cpp
 )
 add_library(clientlib ${clientcomplect})
-target_link_libraries(clientlib ${Boost_LIBRARIES} word_loader sql)
+target_link_libraries(clientlib ${Boost_LIBRARIES} word_loader sql hlp)
+
+
+
+set(sql_mod sql_editor/editor.h sql_editor/editor.cpp)
+add_library(sqleditlib ${sql_mod})
+target_link_libraries(sqleditlib ${Boost_LIBRARIES} sql hlp)
+
+
 
 #######################
 set (LIBS parse_command word_loader sql hlp srvlib clientlib) 

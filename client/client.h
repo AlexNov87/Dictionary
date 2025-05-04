@@ -12,7 +12,6 @@ namespace client
           PARTIAL,
           ALL
      };
-
      class GameClient : public  loader::LanguageStorage
      {
      private:
