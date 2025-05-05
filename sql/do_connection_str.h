@@ -162,7 +162,10 @@ std::string GetSelectIdCatecoriesByName(const T &value){
  */
 std::string  GetRequestSelectFromTrBaseTablebyId(int id);
 
-
+/// @brief Delete lang1 - lang2 from selected cateory request
+/// @param couple lang1 word - lang2 word
+/// @param cat descriptoin of category
+/// @return Delete lang1 - lang2 from selected cateory request
 std::string GetReruestToDeleteCouple(const std::vector<std::wstring>& couple, const std::pair<int, std::wstring> &cat);
 
 };
